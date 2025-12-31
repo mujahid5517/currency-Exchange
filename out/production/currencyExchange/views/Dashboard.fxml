@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane fx:id="mainPane" prefHeight="700.0" prefWidth="1000.0" 
+           xmlns="http://javafx.com/javafx/17.0.2-ea" 
+           xmlns:fx="http://javafx.com/fxml/1" 
+           fx:controller="currencyExchange.controllers.DashboardController">
+   
+   <children>
+      <!-- Top Bar -->
+      <AnchorPane layoutY="2.0" prefHeight="70.0" prefWidth="1000.0" 
+                 style="-fx-background-color: linear-gradient(to right, #2c3e50, #3498db);">
+         <children>
+            <Label layoutX="30.0" layoutY="20.0" text="💰 Currency Exchange" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="26.0" />
+               </font>
+            </Label>
+            
+            <!-- Connection Status -->
+            <Label fx:id="connectionStatusLabel" layoutX="750.0" layoutY="25.0" 
+                   text="Connecting..." textFill="white">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Label>
+            
+            <!-- Progress Indicator - ADD THIS -->
+            <ProgressIndicator fx:id="connectionProgress" layoutX="720.0" layoutY="25.0" 
+                             prefHeight="20.0" prefWidth="20.0" visible="false" />
+            
+            <!-- Reconnect Button -->
+            <Button fx:id="reconnectBtn" layoutX="900.0" layoutY="20.0" 
+                   mnemonicParsing="false" onAction="#reconnectToServer" 
+                   prefHeight="35.0" prefWidth="90.0" 
+                   style="-fx-background-color: #2ecc71; -fx-background-radius: 5; -fx-text-fill: white; -fx-cursor: hand;" 
+                   text="Reconnect">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+      
+      <!-- Rest of your FXML (keep the same as before but without the problematic styling) -->
+      <!-- Sidebar Navigation -->
+      <AnchorPane layoutX="2.0" layoutY="72.0" prefHeight="628.0" prefWidth="200.0" 
+                 style="-fx-background-color: #34495e;">
+         <children>
+            <VBox layoutX="14.0" layoutY="20.0" prefHeight="200.0" prefWidth="172.0" 
+                 spacing="15.0">
+               <children>
+                  <Button fx:id="sbConvBtn" mnemonicParsing="false" onAction="#eventSideBar" 
+                         prefHeight="60.0" prefWidth="172.0" 
+                         style="-fx-background-color: #2c3e50; -fx-background-radius: 5; -fx-text-fill: white; -fx-cursor: hand;" 
+                         text="Converter">
+                     <font>
+                        <Font name="Arial Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  
+                  <Button fx:id="sbSymbCurr" mnemonicParsing="false" onAction="#eventSideBar" 
+                         prefHeight="60.0" prefWidth="172.0" 
+                         style="-fx-background-color: #2c3e50; -fx-background-radius: 5; -fx-text-fill: white; -fx-cursor: hand;" 
+                         text="Currency Symbols">
+                     <font>
+                        <Font name="Arial Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  
+                  <Button fx:id="sbHistCurr" mnemonicParsing="false" onAction="#eventSideBar" 
+                         prefHeight="60.0" prefWidth="172.0" 
+                         style="-fx-background-color: #2c3e50; -fx-background-radius: 5; -fx-text-fill: white; -fx-cursor: hand;" 
+                         text="Historical Data">
+                     <font>
+                        <Font name="Arial Bold" size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      
+      <!-- Main Content Area -->
+      <AnchorPane layoutX="202.0" layoutY="72.0" prefHeight="628.0" prefWidth="798.0" 
+                 style="-fx-background-color: #f5f7fa;">
+         
+         <!-- Title Area -->
+         <AnchorPane layoutX="20.0" layoutY="20.0" prefHeight="50.0" prefWidth="758.0">
+            <children>
+               <Text fx:id="tbTitle1" fill="#7f8c8d" layoutX="14.0" layoutY="20.0" 
+                    strokeType="OUTSIDE" strokeWidth="0.0" text="Home/Converter">
+                  <font>
+                     <Font name="Arial" size="14.0" />
+                  </font>
+               </Text>
+               <Text fx:id="tbTitle2" fill="#2c3e50" layoutX="14.0" layoutY="40.0" 
+                    strokeType="OUTSIDE" strokeWidth="0.0" text="Currency Converter">
+                  <font>
+                     <Font name="Arial Bold" size="22.0" />
+                  </font>
+               </Text>
+            </children>
+         </AnchorPane>
+         
+         <!-- Converter Panel -->
+         <AnchorPane fx:id="anchorPaneConv" layoutX="20.0" layoutY="80.0" 
+                    prefHeight="528.0" prefWidth="758.0" 
+                    style="-fx-background-color: white; -fx-background-radius: 10;" 
+                    visible="true">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+               <Label layoutX="20.0" layoutY="20.0" text="Currency Converter" textFill="#2c3e50">
+                  <font>
+                     <Font name="Arial Bold" size="18.0" />
+                  </font>
+               </Label>
+               
+               <!-- Input Section -->
+               <Label layoutX="20.0" layoutY="70.0" text="Amount:" />
+               <TextField fx:id="txtFieldAmount" layoutX="100.0" layoutY="65.0" 
+                         prefHeight="30.0" prefWidth="200.0" promptText="Enter amount" />
+               
+               <!-- Currency Selection -->
+               <HBox layoutX="20.0" layoutY="110.0" spacing="20.0">
+                  <children>
+                     <VBox spacing="5.0">
+                        <children>
+                           <Label text="From Currency:" />
+                           <HBox spacing="5.0" alignment="CENTER_LEFT">
+                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                   <image>
+                                       <Image url="@images/bill-32.png" />
+                                   </image>
+                               </ImageView>
+                               <ComboBox fx:id="comboBoxFrom" prefWidth="150.0" promptText="Select currency" />
+                           </HBox>
+                        </children>
+                     </VBox>
+                     
+                     <VBox layoutY="30.0">
+                        <children>
+                           <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" 
+                                  onAction="#swapCurrencies" prefHeight="30.0" prefWidth="50.0" 
+                                  style="-fx-background-color: #3498db; -fx-text-fill: white;" 
+                                  text="⇄" />
+                        </children>
+                     </VBox>
+                     
+                     <VBox spacing="5.0">
+                        <children>
+                           <Label text="To Currency:" />
+                           <HBox spacing="5.0" alignment="CENTER_LEFT">
+                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                   <image>
+                                       <Image url="@images/bill-32.png" />
+                                   </image>
+                               </ImageView>
+                               <ComboBox fx:id="comboBoxTo" prefWidth="150.0" promptText="Select currency" />
+                           </HBox>
+                        </children>
+                     </VBox>
+                  </children>
+               </HBox>
+               
+               <!-- Convert Button -->
+               <Button fx:id="convertBtn" layoutX="20.0" layoutY="180.0" 
+                      mnemonicParsing="false" onAction="#eventConvBtn" 
+                      prefHeight="40.0" prefWidth="150.0" 
+                      style="-fx-background-color: #2ecc71; -fx-text-fill: white;" 
+                      text="Convert">
+                  <font>
+                     <Font name="Arial Bold" size="14.0" />
+                  </font>
+               </Button>
+               
+               <!-- Clear Button -->
+               <Button layoutX="180.0" layoutY="180.0" mnemonicParsing="false" 
+                      onAction="#clearConversion" prefHeight="40.0" prefWidth="150.0" 
+                      style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Clear">
+                  <font>
+                     <Font name="Arial" size="14.0" />
+                  </font>
+               </Button>
+               
+               <!-- Results Section -->
+               <VBox layoutX="20.0" layoutY="250.0" spacing="15.0">
+                  <children>
+                     <Text fx:id="convLabel1" fill="#2c3e50" strokeType="OUTSIDE" 
+                          strokeWidth="0.0" visible="false">
+                        <font>
+                           <Font name="Arial" size="16.0" />
+                        </font>
+                     </Text>
+                     <Text fx:id="convLabel2" fill="#2ecc71" strokeType="OUTSIDE" 
+                          strokeWidth="0.0" visible="false">
+                        <font>
+                           <Font name="Arial Bold" size="18.0" />
+                        </font>
+                     </Text>
+                     <Text fx:id="convLabel3" fill="#7f8c8d" strokeType="OUTSIDE" 
+                          strokeWidth="0.0" visible="false">
+                        <font>
+                           <Font name="Arial" size="14.0" />
+                        </font>
+                     </Text>
+                  </children>
+               </VBox>
+            </children>
+         </AnchorPane>
+         
+         <!-- Currency Symbols Panel -->
+         <AnchorPane fx:id="anchorPaneSymbCurr" layoutX="20.0" layoutY="80.0" 
+                    prefHeight="528.0" prefWidth="758.0" 
+                    style="-fx-background-color: white; -fx-background-radius: 10;" 
+                    visible="false">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+               <Label layoutX="20.0" layoutY="20.0" text="Currency Symbols" textFill="#2c3e50">
+                  <font>
+                     <Font name="Arial Bold" size="18.0" />
+                  </font>
+               </Label>
+               
+               <!-- Search Section -->
+               <HBox layoutX="20.0" layoutY="70.0" spacing="10.0">
+                  <children>
+                     <TextField fx:id="txtFieldSearch" prefHeight="30.0" prefWidth="300.0" 
+                               promptText="Search by symbol or name" />
+                     <Button fx:id="searchBtn" mnemonicParsing="false" 
+                            onAction="#eventSearchBtn" prefHeight="30.0" prefWidth="100.0" 
+                            style="-fx-background-color: #3498db; -fx-text-fill: white;" 
+                            text="Search" />
+                     <Button mnemonicParsing="false" onAction="#showAllCurrencies" 
+                            prefHeight="30.0" prefWidth="100.0" 
+                            style="-fx-background-color: #95a5a6; -fx-text-fill: white;" 
+                            text="Show All" />
+                  </children>
+               </HBox>
+               
+               <!-- Currency Table -->
+               <TableView fx:id="tableView" layoutX="20.0" layoutY="120.0" 
+                         prefHeight="350.0" prefWidth="718.0">
+                  <columns>
+                     <TableColumn fx:id="col1Symbols" prefWidth="200.0" text="Currency Symbol" />
+                     <TableColumn fx:id="col2Signification" prefWidth="500.0" text="Currency Name" />
+                  </columns>
+               </TableView>
+               
+               <!-- Info Section -->
+               <Label layoutX="20.0" layoutY="480.0" text="Total currencies:" 
+                     textFill="#7f8c8d" fx:id="totalCurrenciesLabel">
+                  <font>
+                     <Font name="Arial" size="12.0" />
+                  </font>
+               </Label>
+            </children>
+         </AnchorPane>
+         
+         <!-- Historical Data Panel -->
+         <AnchorPane fx:id="anchorPaneHistCurr" layoutX="20.0" layoutY="80.0" 
+                    prefHeight="528.0" prefWidth="758.0" 
+                    style="-fx-background-color: white; -fx-background-radius: 10;" 
+                    visible="false">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+               <Label layoutX="20.0" layoutY="20.0" text="Historical Currency Data" 
+                     textFill="#2c3e50">
+                  <font>
+                     <Font name="Arial Bold" size="18.0" />
+                  </font>
+               </Label>
+               
+               <!-- Currency Selection for Chart -->
+               <HBox layoutX="20.0" layoutY="70.0" spacing="10.0">
+                  <children>
+                     <Label text="Select Currency:" />
+                     <ComboBox fx:id="comboBoxChooSymb" onAction="#eventComboBoxGraph" 
+                              prefWidth="200.0" promptText="Select currency" />
+                     <Label text="Base Currency: EUR" textFill="#7f8c8d" />
+                  </children>
+               </HBox>
+               
+               <!-- Chart Display -->
+               <LineChart fx:id="lineChart" layoutX="20.0" layoutY="120.0" 
+                         prefHeight="350.0" prefWidth="718.0" title="Historical Exchange Rate">
+                  <xAxis>
+                     <CategoryAxis label="Date" side="BOTTOM" />
+                  </xAxis>
+                  <yAxis>
+                     <NumberAxis label="Exchange Rate" side="LEFT" />
+                  </yAxis>
+               </LineChart>
+               
+               <!-- Chart Info -->
+               <Label layoutX="20.0" layoutY="480.0" 
+                     text="Shows last 8 days of exchange rate data relative to EUR" 
+                     textFill="#7f8c8d" wrapText="true">
+                  <font>
+                     <Font name="Arial" size="12.0" />
+                  </font>
+               </Label>
+               
+               <!-- Action Buttons for Chart -->
+               <HBox layoutX="550.0" layoutY="70.0" spacing="10.0">
+                  <children>
+                     <Button mnemonicParsing="false" onAction="#refreshChart" 
+                            prefHeight="35.0" prefWidth="100.0" 
+                            style="-fx-background-color: #3498db; -fx-background-radius: 5; -fx-text-fill: white;" 
+                            text="Refresh" />
+                     <Button mnemonicParsing="false" onAction="#exportChart" 
+                            prefHeight="35.0" prefWidth="100.0" 
+                            style="-fx-background-color: #9b59b6; -fx-background-radius: 5; -fx-text-fill: white;" 
+                            text="Export" />
+                  </children>
+               </HBox>
+            </children>
+         </AnchorPane>
+      </AnchorPane>
+   </children>
+</AnchorPane>
