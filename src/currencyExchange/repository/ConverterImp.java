@@ -14,7 +14,6 @@ public class ConverterImp implements Converter {
 
     private final JsonConversion jsonConversion;
     private static final Logger LOGGER = Logger.getLogger(ConverterImp.class.getName());
-
     public ConverterImp() {
         this.jsonConversion = new JsonConversion();
     }
